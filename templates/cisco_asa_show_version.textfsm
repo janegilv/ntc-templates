@@ -16,6 +16,7 @@ Value FAILOVER (\S+)
 Value CLUSTER (\S+)
 Value List SERIAL (\S+)
 Value LAST_MOD (.+)
+Value SECURITY_CONTEXTS (\d+)
 
 Start
   ^.*Software\sVersion\s${VERSION}
@@ -35,3 +36,16 @@ Start
   ^Cluster\s+:\s${CLUSTER}
   ^Serial Number:\s${SERIAL}
   ^.+last modified by\s${LAST_MOD}
+  ^^Failover cluster licensed features for this platform: -> FailoverLicense
+  ^^Licensed features for this platform: -> DeviceLicense
+
+DeviceLicense
+  #Single license info is recorded 
+  ^Security Contexts\s+:\s+${SECURITY_CONTEXTS}
+  ^\s*$$ -> Start
+  # Each state should end with ^. -> Error (contributing ntc-templates). We do not yet account for every line
+
+FailoverLicense
+  #Failover license info is not recorded
+  ^\s*$$ -> Start
+  # Each state should end with ^. -> Error (contributing ntc-templates). We do not yet account for every line
