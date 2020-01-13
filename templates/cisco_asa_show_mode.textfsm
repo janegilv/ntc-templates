@@ -1,0 +1,4 @@
+Value MODE (\w+)
+
+Start
+  ^Security context mode: ${MODE} -> Record
